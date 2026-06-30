@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="header__plate">
+
+    <div class="header__top">
+      <div>
+        <p class="header__eyebrow">Component Library · Sheet 001</p>
+        <h1 class="header__title">Section Catalog</h1>
+      </div>
+      <div class="header__meta">
+        <span><strong>Total</strong> <span id="js-count">0</span></span>
+        <span><strong>Showing</strong> <span id="js-showing">0</span></span>
+      </div>
+    </div>
+
+    <div class="header__controls">
+      <input
+        id="js-search"
+        class="search"
+        type="search"
+        placeholder="Search by name, category, or code…"
+        aria-label="Search sections"
+        autocomplete="off"
+      >
+      <div id="js-tabs" class="tabs" role="tablist" aria-label="Filter by category"></div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ── Grid ── -->
+<main class="main">
+  <div id="js-grid" class="grid" aria-live="polite" aria-label="Component sections"></div>
+  <p id="js-empty" class="empty" hidden>No sections match — try a different search or filter.</p>
+</main>
+
+<footer class="page-footer">
+  <p>To add a section: open <code>js/data.js</code> and copy the template at the bottom of the file.</p>
+</footer>
+
+<!-- ── Modal ── -->
+<div id="js-modal" class="modal-overlay" hidden>
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="js-modal-title"
+  >
+
+    <div class="modal__head">
+      <div>
+        <p id="js-modal-code" class="modal__code-label"></p>
+        <h2 id="js-modal-title" class="modal__title"></h2>
+      </div>
+      <button id="js-close" class="modal__close" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal__bar">
+      <div class="code-tabs" role="tablist">
+        <button id="js-tab-html" class="code-tab is-active" type="button" role="tab" aria-selected="true">HTML</button>
+        <button id="js-tab-css"  class="code-tab"           type="button" role="tab" aria-selected="false">CSS</button>
+      </div>
+      <div class="modal__actions">
+        <button id="js-copy" class="btn-copy" type="button">Copy</button>
+      </div>
+    </div>
+
+    <pre class="code-pre"><code id="js-code"></code></pre>
+
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+(function () {
+  // ── State ──
+  var activeCategory = 'all';
+  var activeQuery    = '';
+  var activeSection  = null;
+  var activeTab      = 'html';
+  var lastCard       = null;
+
+  // ── Refs ──
+  var grid      = document.getElementById('js-grid');
+  var empty     = document.getElementById('js-empty');
+  var countEl   = document.getElementById('js-count');
+  var showingEl = document.getElementById('js-showing');
+  var searchEl  = document.getElementById('js-search');
+  var tabsEl    = document.getElementById('js-tabs');
+
+  var overlay    = document.getElementById('js-modal');
+  var modalTitle = document.getElementById('js-modal-title');
+  var modalCode  = document.getElementById('js-modal-code');
+  var codeEl     = document.getElementById('js-code');
+  var tabHtml    = document.getElementById('js-tab-html');
+  var tabCss     = document.getElementById('js-tab-css');
+  var copyBtn    = document.getElementById('js-copy');
+  var closeBtn   = document.getElementById('js-close');
+
+  // ── Filter ──
+  function filtered() {
+    var q = activeQuery.trim().toLowerCase();
+    return SECTIONS.filter(function (s) {
+      var catOk = activeCategory === 'all' || s.category === activeCategory;
+      if (!catOk) return false;
+      if (!q) return true;
+      return (
+        s.name.toLowerCase().indexOf(q) !== -1 ||
+        s.code.toLowerCase().indexOf(q) !== -1 ||
+        s.category.toLowerCase().indexOf(q) !== -1 ||
+        (s.tags && s.tags.join(' ').indexOf(q) !== -1)
+      );
+    });
+  }
+
+  // ── Tabs ──
+  function buildTabs() {
+    var cats = ['all'];
+    SECTIONS.forEach(function (s) {
+      if (cats.indexOf(s.category) === -1) cats.push(s.category);
+    });
+    tabsEl.innerHTML = '';
+    cats.forEach(function (cat) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tab' + (cat === activeCategory ? ' is-active' : '');
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', cat === activeCategory ? 'true' : 'false');
+      btn.textContent = cat === 'all' ? 'All' : cat;
+      btn.addEventListener('click', function () {
+        activeCategory = cat;
+        buildTabs();
+        renderGrid();
+      });
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  // ── Grid ──
+  function renderGrid() {
+    var items = filtered();
+
+    countEl.textContent   = SECTIONS.length;
+    showingEl.textContent = items.length;
+
+    grid.innerHTML = '';
+    empty.hidden   = items.length > 0;
+
+    items.forEach(function (section) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'card';
+      btn.setAttribute('aria-label', 'View code for ' + section.name);
+
+      btn.innerHTML =
+        '<span class="card__thumb">' +
+          section.thumbnail +
+          '<span class="card__mark-bl"></span>' +
+          '<span class="card__mark-br"></span>' +
+        '</span>' +
+        '<span class="card__label">' +
+          '<span class="card__code">' + section.code + '</span>' +
+          '<span class="card__name">' + section.name + '</span>' +
+        '</span>';
+
+      btn.addEventListener('click', function () {
+        openModal(section, btn);
+      });
+
+      grid.appendChild(btn);
+    });
+  }
+
+  // ── Modal ──
+  function openModal(section, trigger) {
+    activeSection = section;
+    activeTab     = 'html';
+    lastCard      = trigger || null;
+
+    modalTitle.textContent = section.name;
+    modalCode.textContent  = section.code + ' · ' + section.category;
+
+    setTab('html');
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    if (lastCard) lastCard.focus();
+  }
+
+  function setTab(tab) {
+    activeTab = tab;
+    var isHtml = tab === 'html';
+    tabHtml.classList.toggle('is-active', isHtml);
+    tabCss.classList.toggle('is-active',  !isHtml);
+    tabHtml.setAttribute('aria-selected', isHtml ? 'true' : 'false');
+    tabCss.setAttribute('aria-selected',  isHtml ? 'false' : 'true');
+    codeEl.textContent = isHtml ? activeSection.html : activeSection.css;
+    resetCopy();
+  }
+
+  function resetCopy() {
+    copyBtn.textContent = 'Copy';
+    copyBtn.classList.remove('is-done');
+  }
+
+  function doCopy() {
+    var text = activeTab === 'html' ? activeSection.html : activeSection.css;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        copyBtn.textContent = 'Copied ✓';
+        copyBtn.classList.add('is-done');
+        setTimeout(resetCopy, 1800);
+      }).catch(fallbackCopy.bind(null, text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      copyBtn.textContent = 'Copied ✓';
+      copyBtn.classList.add('is-done');
+      setTimeout(resetCopy, 1800);
+    } catch (e) {
+      copyBtn.textContent = 'Failed — select manually';
+      setTimeout(resetCopy, 2000);
+    }
+    document.body.removeChild(ta);
+  }
+
+  // ── Events ──
+  tabHtml.addEventListener('click', function () { setTab('html'); });
+  tabCss.addEventListener('click',  function () { setTab('css'); });
+  copyBtn.addEventListener('click', doCopy);
+  closeBtn.addEventListener('click', closeModal);
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !overlay.hidden) closeModal();
+  });
+
+  searchEl.addEventListener('input', function () {
+    activeQuery = searchEl.value;
+    renderGrid();
+  });
+
+  // ── Init ──
+  buildTabs();
+  renderGrid();
+})();
+</script>
+</body>
+</html>
