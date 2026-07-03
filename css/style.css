@@ -207,6 +207,33 @@ html, body {
   padding: 10px 14px 12px;
   background: var(--surface-2);
 }
+
+.card__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card__preview-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  color: var(--ink-dim);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+.card__preview-btn:hover {
+  border-color: var(--teal);
+  color: var(--ink);
+  background: rgba(79,168,168,0.12);
+}
 .card__code {
   display: block;
   font-family: var(--font-mono);
@@ -355,6 +382,19 @@ html, body {
 }
 .btn-copy:hover { background: var(--copper-dk); border-color: var(--copper-dk); }
 .btn-copy.is-done { background: var(--teal); border-color: var(--teal); }
+
+.btn-preview {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 18px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.btn-preview:hover { background: var(--ink); color: #fff; }
 
 .code-pre {
   margin: 0;
