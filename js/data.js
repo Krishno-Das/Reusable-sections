@@ -1,8 +1,13 @@
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
 //  SECTION CATALOG — DATA FILE
-//  Add your own sections by copying the template
-//  at the bottom of this file.
-// ─────────────────────────────────────────────
+//
+//  HOW TO ADD A SECTION:
+//  1. Copy the template block at the bottom
+//  2. Drop a screenshot into /thumbnails/  (jpg, png, webp)
+//  3. Set thumbnail to: 'thumbnails/your-image.png'
+//  4. Fill in html + css
+//  5. Save → git add . → git commit -m "msg" → git push
+// ─────────────────────────────────────────────────────────
 
 const SECTIONS = [
 
@@ -12,15 +17,8 @@ const SECTIONS = [
     name: "Split Navbar",
     category: "Navbar",
     tags: ["navbar","navigation","header","cta"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect x="14" y="44" width="252" height="72" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="30" y="62" width="32" height="8" rx="2" fill="#4fa8a8"/>
-      <rect x="84" y="66" width="26" height="4" rx="2" fill="#3d6070"/>
-      <rect x="118" y="66" width="26" height="4" rx="2" fill="#3d6070"/>
-      <rect x="152" y="66" width="26" height="4" rx="2" fill="#3d6070"/>
-      <rect x="196" y="60" width="52" height="16" rx="3" fill="#c97a3d"/>
-      <text x="14" y="134" font-family="monospace" font-size="10" fill="#4fa8a8">NAV-01 · Split Navbar</text>
-    </svg>`,
+    // Replace with: thumbnail: 'thumbnails/nav-01.png'
+    thumbnail: null,
     html: `<nav class="nav-split">
   <a href="#" class="nav-split__logo">YourBrand</a>
   <ul class="nav-split__links">
@@ -46,7 +44,6 @@ const SECTIONS = [
   font-size: 17px;
   color: #111;
   text-decoration: none;
-  letter-spacing: -0.01em;
 }
 .nav-split__links {
   display: flex;
@@ -70,7 +67,6 @@ const SECTIONS = [
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
-  transition: background 0.15s;
 }
 .nav-split__cta:hover { background: #333; }
 @media (max-width: 640px) { .nav-split__links { display: none; } }`
@@ -82,18 +78,7 @@ const SECTIONS = [
     name: "Split Hero",
     category: "Hero",
     tags: ["hero","banner","cta","image"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect width="280" height="160" fill="#14202a"/>
-      <rect x="16" y="28" width="90" height="8" rx="2" fill="#e9e4d8"/>
-      <rect x="16" y="44" width="72" height="8" rx="2" fill="#e9e4d8"/>
-      <rect x="16" y="68" width="84" height="4" rx="2" fill="#3d6070"/>
-      <rect x="16" y="78" width="64" height="4" rx="2" fill="#3d6070"/>
-      <rect x="16" y="96" width="56" height="18" rx="3" fill="#c97a3d"/>
-      <rect x="148" y="20" width="116" height="116" rx="6" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <line x1="148" y1="20" x2="264" y2="136" stroke="#2e5a6e" stroke-width="1"/>
-      <line x1="264" y1="20" x2="148" y2="136" stroke="#2e5a6e" stroke-width="1"/>
-      <text x="16" y="152" font-family="monospace" font-size="9" fill="#4fa8a8">HERO-01 · Split Hero</text>
-    </svg>`,
+    thumbnail: null,
     html: `<section class="hero-split">
   <div class="hero-split__body">
     <h1 class="hero-split__heading">Build interfaces<br>faster.</h1>
@@ -147,7 +132,6 @@ const SECTIONS = [
 @media (max-width: 768px) {
   .hero-split { flex-direction: column; padding: 48px 20px; }
   .hero-split__heading { font-size: 36px; }
-  .hero-split__visual { width: 100%; }
 }`
   },
 
@@ -157,22 +141,7 @@ const SECTIONS = [
     name: "3-Tier Pricing",
     category: "Pricing",
     tags: ["pricing","cards","plans","saas"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect width="280" height="160" fill="#14202a"/>
-      <rect x="14" y="24" width="72" height="112" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="102" y="16" width="76" height="128" rx="3" fill="#1e3a4a" stroke="#c97a3d" stroke-width="1.5"/>
-      <rect x="194" y="24" width="72" height="112" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="24" y="40" width="52" height="6" rx="2" fill="#3d6070"/>
-      <rect x="112" y="32" width="56" height="6" rx="2" fill="#4fa8a8"/>
-      <rect x="204" y="40" width="52" height="6" rx="2" fill="#3d6070"/>
-      <rect x="24" y="56" width="38" height="10" rx="2" fill="#e9e4d8"/>
-      <rect x="112" y="48" width="42" height="12" rx="2" fill="#e9e4d8"/>
-      <rect x="204" y="56" width="38" height="10" rx="2" fill="#e9e4d8"/>
-      <rect x="24" y="110" width="52" height="14" rx="3" fill="none" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="112" y="106" width="56" height="16" rx="3" fill="#c97a3d"/>
-      <rect x="204" y="110" width="52" height="14" rx="3" fill="none" stroke="#2e5a6e" stroke-width="1"/>
-      <text x="14" y="154" font-family="monospace" font-size="9" fill="#4fa8a8">PRICING-01 · 3-Tier</text>
-    </svg>`,
+    thumbnail: null,
     html: `<section class="pricing-grid">
   <div class="pricing-grid__card">
     <p class="pricing-grid__tier">Starter</p>
@@ -285,26 +254,7 @@ const SECTIONS = [
     name: "Feature Cards",
     category: "Cards",
     tags: ["cards","features","grid","icons"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect width="280" height="160" fill="#14202a"/>
-      <rect x="14" y="14" width="116" height="60" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="150" y="14" width="116" height="60" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="14" y="86" width="116" height="60" rx="3" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="150" y="86" width="116" height="60" rx="3" fill="#1e3a4a" stroke="#c97a3d" stroke-width="1"/>
-      <rect x="24" y="24" width="20" height="16" rx="2" fill="#4fa8a8"/>
-      <rect x="160" y="24" width="20" height="16" rx="2" fill="#4fa8a8"/>
-      <rect x="24" y="96" width="20" height="16" rx="2" fill="#4fa8a8"/>
-      <rect x="160" y="96" width="20" height="16" rx="2" fill="#c97a3d"/>
-      <rect x="52" y="28" width="60" height="5" rx="2" fill="#e9e4d8"/>
-      <rect x="188" y="28" width="60" height="5" rx="2" fill="#e9e4d8"/>
-      <rect x="52" y="100" width="60" height="5" rx="2" fill="#e9e4d8"/>
-      <rect x="188" y="100" width="60" height="5" rx="2" fill="#e9e4d8"/>
-      <rect x="24" y="50" width="96" height="3" rx="2" fill="#2e5a6e"/>
-      <rect x="160" y="50" width="96" height="3" rx="2" fill="#2e5a6e"/>
-      <rect x="24" y="122" width="96" height="3" rx="2" fill="#2e5a6e"/>
-      <rect x="160" y="122" width="96" height="3" rx="2" fill="#2e5a6e"/>
-      <text x="14" y="155" font-family="monospace" font-size="9" fill="#4fa8a8">CARDS-01 · Feature Grid</text>
-    </svg>`,
+    thumbnail: null,
     html: `<section class="feature-cards">
   <article class="feature-cards__item">
     <div class="feature-cards__icon">⚡</div>
@@ -343,10 +293,7 @@ const SECTIONS = [
   padding: 24px;
   background: #fff;
 }
-.feature-cards__icon {
-  font-size: 28px;
-  margin-bottom: 14px;
-}
+.feature-cards__icon { font-size: 28px; margin-bottom: 14px; }
 .feature-cards__item h3 {
   font-size: 16px;
   font-weight: 700;
@@ -370,28 +317,7 @@ const SECTIONS = [
     name: "Dark Column Footer",
     category: "Footer",
     tags: ["footer","dark","columns","links","social"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect width="280" height="160" fill="#14202a"/>
-      <line x1="14" y1="32" x2="266" y2="32" stroke="#2e5a6e" stroke-width="1" stroke-dasharray="4 3"/>
-      <rect x="14" y="44" width="40" height="5" rx="2" fill="#4fa8a8"/>
-      <rect x="84" y="44" width="40" height="5" rx="2" fill="#4fa8a8"/>
-      <rect x="154" y="44" width="40" height="5" rx="2" fill="#4fa8a8"/>
-      <rect x="224" y="44" width="40" height="5" rx="2" fill="#4fa8a8"/>
-      <rect x="14" y="58" width="32" height="3" rx="2" fill="#3d6070"/>
-      <rect x="14" y="68" width="28" height="3" rx="2" fill="#3d6070"/>
-      <rect x="14" y="78" width="30" height="3" rx="2" fill="#3d6070"/>
-      <rect x="84" y="58" width="32" height="3" rx="2" fill="#3d6070"/>
-      <rect x="84" y="68" width="28" height="3" rx="2" fill="#3d6070"/>
-      <rect x="84" y="78" width="30" height="3" rx="2" fill="#3d6070"/>
-      <rect x="154" y="58" width="32" height="3" rx="2" fill="#3d6070"/>
-      <rect x="154" y="68" width="28" height="3" rx="2" fill="#3d6070"/>
-      <rect x="154" y="78" width="30" height="3" rx="2" fill="#3d6070"/>
-      <circle cx="232" cy="64" r="9" fill="none" stroke="#3d6070" stroke-width="1.5"/>
-      <circle cx="252" cy="64" r="9" fill="none" stroke="#3d6070" stroke-width="1.5"/>
-      <line x1="14" y1="110" x2="266" y2="110" stroke="#2e5a6e" stroke-width="1" stroke-dasharray="4 3"/>
-      <rect x="14" y="120" width="70" height="4" rx="2" fill="#2e5a6e"/>
-      <text x="14" y="154" font-family="monospace" font-size="9" fill="#4fa8a8">FOOTER-01 · Dark Columns</text>
-    </svg>`,
+    thumbnail: null,
     html: `<footer class="footer-dark">
   <div class="footer-dark__inner">
     <div class="footer-dark__col">
@@ -484,17 +410,7 @@ const SECTIONS = [
     name: "Email Subscribe",
     category: "Marketing",
     tags: ["email","subscribe","newsletter","form","cta"],
-    thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-      <rect width="280" height="160" fill="#14202a"/>
-      <rect x="40" y="24" width="200" height="112" rx="6" fill="#1e3a4a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="80" y="44" width="120" height="8" rx="2" fill="#e9e4d8"/>
-      <rect x="70" y="60" width="140" height="4" rx="2" fill="#3d6070"/>
-      <rect x="56" y="88" width="110" height="24" rx="4" fill="#14202a" stroke="#2e5a6e" stroke-width="1"/>
-      <rect x="174" y="88" width="54" height="24" rx="4" fill="#c97a3d"/>
-      <rect x="66" y="98" width="60" height="4" rx="2" fill="#2e5a6e"/>
-      <rect x="184" y="98" width="34" height="4" rx="2" fill="#fff" opacity="0.6"/>
-      <text x="40" y="152" font-family="monospace" font-size="9" fill="#4fa8a8">SUB-01 · Email Subscribe</text>
-    </svg>`,
+    thumbnail: null,
     html: `<section class="subscribe-block">
   <h2 class="subscribe-block__heading">Stay in the loop</h2>
   <p class="subscribe-block__sub">Get updates on new sections and components, straight to your inbox.</p>
@@ -524,10 +440,7 @@ const SECTIONS = [
   line-height: 1.6;
   margin: 0 0 32px;
 }
-.subscribe-block__form {
-  display: flex;
-  gap: 8px;
-}
+.subscribe-block__form { display: flex; gap: 8px; }
 .subscribe-block__input {
   flex: 1;
   padding: 12px 16px;
@@ -557,19 +470,17 @@ const SECTIONS = [
   },
 
   // ─────────────────────────────────────────────
-  // TEMPLATE: Copy this block to add a new section
+  // TEMPLATE — copy this to add a new section
   // ─────────────────────────────────────────────
   // {
-  //   id: "category-02",          // unique, lowercase, no spaces
-  //   code: "CAT-02",             // label on the card
+  //   id: "category-02",
+  //   code: "CAT-02",
   //   name: "Section Name",
-  //   category: "Category",       // used for filter tabs
-  //   tags: ["tag1","tag2"],       // used for search
-  //   thumbnail: `<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
-  //     <!-- draw a simple schematic here -->
-  //   </svg>`,
-  //   html: `<!-- your markup here -->`,
-  //   css: `/* your styles here */`
+  //   category: "Category",
+  //   tags: ["tag1", "tag2"],
+  //   thumbnail: 'thumbnails/category-02.png',  // drop image in /thumbnails
+  //   html: `<!-- your markup -->`,
+  //   css: `/* your styles */`
   // },
 
 ];

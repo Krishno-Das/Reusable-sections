@@ -6,64 +6,53 @@
   <title>Section Catalog</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ── Header ── -->
-<header class="header">
-  <div class="header__plate">
-
-    <div class="header__top">
-      <div>
-        <p class="header__eyebrow">Component Library · Sheet 001</p>
-        <h1 class="header__title">Section Catalog</h1>
-      </div>
-      <div class="header__meta">
-        <span><strong>Total</strong> <span id="js-count">0</span></span>
-        <span><strong>Showing</strong> <span id="js-showing">0</span></span>
-      </div>
-    </div>
-
-    <div class="header__controls">
+<!-- ── Top bar ── -->
+<header class="topbar">
+  <div class="topbar__inner">
+    <p class="topbar__brand"><span></span>Section Catalog</p>
+    <div class="topbar__search-wrap">
+      <span class="topbar__search-icon">⌕</span>
       <input
         id="js-search"
         class="search"
         type="search"
-        placeholder="Search by name, category, or code…"
+        placeholder="Search sections…"
         aria-label="Search sections"
         autocomplete="off"
       >
-      <div id="js-tabs" class="tabs" role="tablist" aria-label="Filter by category"></div>
     </div>
-
+    <p class="topbar__count"><span id="js-showing">0</span> of <span id="js-count">0</span></p>
   </div>
 </header>
 
+<!-- ── Filter tabs ── -->
+<nav class="filter-bar" aria-label="Filter by category">
+  <div class="filter-bar__inner" id="js-tabs" role="tablist"></div>
+</nav>
+
 <!-- ── Grid ── -->
 <main class="main">
-  <div id="js-grid" class="grid" aria-live="polite" aria-label="Component sections"></div>
+  <div id="js-grid" class="grid" aria-live="polite"></div>
   <p id="js-empty" class="empty" hidden>No sections match — try a different search or filter.</p>
 </main>
 
 <footer class="page-footer">
-  <p>To add a section: open <code>js/data.js</code> and copy the template at the bottom of the file.</p>
+  <p>Add sections by editing <code>js/data.js</code> — see the template comment at the bottom of that file.</p>
 </footer>
 
 <!-- ── Modal ── -->
 <div id="js-modal" class="modal-overlay" hidden>
-  <div
-    class="modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="js-modal-title"
-  >
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="js-modal-title">
 
     <div class="modal__head">
       <div>
-        <p id="js-modal-code" class="modal__code-label"></p>
         <h2 id="js-modal-title" class="modal__title"></h2>
+        <p id="js-modal-sub" class="modal__sub"></p>
       </div>
       <button id="js-close" class="modal__close" type="button" aria-label="Close">✕</button>
     </div>
@@ -75,26 +64,26 @@
       </div>
       <div class="modal__actions">
         <button id="js-preview" class="btn-preview" type="button">Live preview ↗</button>
-        <button id="js-copy" class="btn-copy" type="button">Copy</button>
+        <button id="js-copy"    class="btn-copy"    type="button">Copy</button>
       </div>
     </div>
 
     <pre class="code-pre"><code id="js-code"></code></pre>
-
   </div>
 </div>
 
 <script src="js/data.js"></script>
 <script>
 (function () {
-  // ── State ──
+
+  /* ── state ── */
   var activeCategory = 'all';
   var activeQuery    = '';
   var activeSection  = null;
   var activeTab      = 'html';
   var lastCard       = null;
 
-  // ── Refs ──
+  /* ── refs ── */
   var grid      = document.getElementById('js-grid');
   var empty     = document.getElementById('js-empty');
   var countEl   = document.getElementById('js-count');
@@ -104,7 +93,7 @@
 
   var overlay    = document.getElementById('js-modal');
   var modalTitle = document.getElementById('js-modal-title');
-  var modalCode  = document.getElementById('js-modal-code');
+  var modalSub   = document.getElementById('js-modal-sub');
   var codeEl     = document.getElementById('js-code');
   var tabHtml    = document.getElementById('js-tab-html');
   var tabCss     = document.getElementById('js-tab-css');
@@ -112,7 +101,17 @@
   var previewBtn = document.getElementById('js-preview');
   var closeBtn   = document.getElementById('js-close');
 
-  // ── Filter ──
+  /* ── category icons map ── */
+  var icons = {
+    'Navbar':    '🧭',
+    'Hero':      '🖼️',
+    'Pricing':   '💳',
+    'Cards':     '🃏',
+    'Footer':    '📋',
+    'Marketing': '📣',
+  };
+
+  /* ── filter ── */
   function filtered() {
     var q = activeQuery.trim().toLowerCase();
     return SECTIONS.filter(function (s) {
@@ -128,7 +127,7 @@
     });
   }
 
-  // ── Tabs ──
+  /* ── tabs ── */
   function buildTabs() {
     var cats = ['all'];
     SECTIONS.forEach(function (s) {
@@ -151,79 +150,84 @@
     });
   }
 
-  // ── Grid ──
+  /* ── thumbnail html ── */
+  function thumbHtml(section) {
+    if (section.thumbnail) {
+      return '<img src="' + section.thumbnail + '" alt="' + section.name + ' preview" loading="lazy">';
+    }
+    var icon = icons[section.category] || '📦';
+    return (
+      '<div class="card__placeholder">' +
+        '<div class="card__placeholder-icon">' + icon + '</div>' +
+        '<span class="card__placeholder-label">No screenshot yet</span>' +
+      '</div>'
+    );
+  }
+
+  /* ── grid ── */
   function renderGrid() {
     var items = filtered();
-
     countEl.textContent   = SECTIONS.length;
     showingEl.textContent = items.length;
-
     grid.innerHTML = '';
-    empty.hidden   = items.length > 0;
+    empty.hidden = items.length > 0;
 
     items.forEach(function (section) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'card';
-      btn.setAttribute('aria-label', 'View code for ' + section.name);
+      var card = document.createElement('div');
+      card.className = 'card';
 
-      btn.innerHTML =
-        '<span class="card__thumb">' +
-          section.thumbnail +
-          '<span class="card__mark-bl"></span>' +
-          '<span class="card__mark-br"></span>' +
-        '</span>' +
-        '<span class="card__label">' +
-          '<span class="card__code">' + section.code + '</span>' +
-          '<span class="card__row">' +
+      card.innerHTML =
+        '<div class="card__thumb">' +
+          thumbHtml(section) +
+          '<span class="card__badge">' + section.category + '</span>' +
+        '</div>' +
+        '<div class="card__body">' +
+          '<div class="card__meta">' +
+            '<span class="card__code">' + section.code + '</span>' +
             '<span class="card__name">' + section.name + '</span>' +
-            '<button type="button" class="card__preview-btn" data-preview-id="' + section.id + '">Preview ↗</button>' +
-          '</span>' +
-        '</span>';
+          '</div>' +
+          '<div class="card__actions">' +
+            '<button type="button" class="card__btn card__btn--code">View code</button>' +
+            '<button type="button" class="card__btn card__btn--preview">Preview ↗</button>' +
+          '</div>' +
+        '</div>';
 
-      btn.addEventListener('click', function (e) {
-        if (e.target.closest('.card__preview-btn')) {
-          e.stopPropagation();
-          openPreview(section);
-          return;
-        }
-        openModal(section, btn);
-      });
+      var codeBtn    = card.querySelector('.card__btn--code');
+      var prevBtn    = card.querySelector('.card__btn--preview');
 
-      grid.appendChild(btn);
+      codeBtn.addEventListener('click', function () { openModal(section, codeBtn); });
+      prevBtn.addEventListener('click', function () { openPreview(section); });
+
+      grid.appendChild(card);
     });
   }
 
-  // ── Live preview ──
-  function buildPreviewDoc(section) {
-    return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+  /* ── live preview ── */
+  function buildDoc(section) {
+    return '<!DOCTYPE html><html lang="en"><head>' +
+      '<meta charset="UTF-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<title>' + section.name + ' — preview</title>' +
-      '<style>html,body{margin:0;background:#fafafa;}' + section.css + '</style>' +
-      '</head><body>' + section.html + '</body></html>';
+      '<style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#fafafa}' +
+      section.css + '</style></head><body>' +
+      section.html + '</body></html>';
   }
 
   function openPreview(section) {
-    var doc = buildPreviewDoc(section);
-    var win = window.open('', '_blank');
-    if (!win) {
-      alert('Your browser blocked the popup. Allow popups for this site and try again.');
-      return;
-    }
-    win.document.open();
-    win.document.write(doc);
-    win.document.close();
+    var w = window.open('', '_blank');
+    if (!w) { alert('Allow popups for this site and try again.'); return; }
+    w.document.open();
+    w.document.write(buildDoc(section));
+    w.document.close();
   }
 
-  // ── Modal ──
+  /* ── modal ── */
   function openModal(section, trigger) {
     activeSection = section;
     activeTab     = 'html';
     lastCard      = trigger || null;
-
     modalTitle.textContent = section.name;
-    modalCode.textContent  = section.code + ' · ' + section.category;
-
+    modalSub.textContent   = section.code + ' · ' + section.category;
     setTab('html');
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -259,55 +263,35 @@
         copyBtn.textContent = 'Copied ✓';
         copyBtn.classList.add('is-done');
         setTimeout(resetCopy, 1800);
-      }).catch(fallbackCopy.bind(null, text));
+      });
     } else {
-      fallbackCopy(text);
-    }
-  }
-
-  function fallbackCopy(text) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-9999px';
+      document.body.appendChild(ta);
+      ta.select();
       document.execCommand('copy');
+      document.body.removeChild(ta);
       copyBtn.textContent = 'Copied ✓';
       copyBtn.classList.add('is-done');
       setTimeout(resetCopy, 1800);
-    } catch (e) {
-      copyBtn.textContent = 'Failed — select manually';
-      setTimeout(resetCopy, 2000);
     }
-    document.body.removeChild(ta);
   }
 
-  // ── Events ──
+  /* ── events ── */
   tabHtml.addEventListener('click', function () { setTab('html'); });
   tabCss.addEventListener('click',  function () { setTab('css'); });
   copyBtn.addEventListener('click', doCopy);
-  previewBtn.addEventListener('click', function () {
-    if (activeSection) openPreview(activeSection);
-  });
+  previewBtn.addEventListener('click', function () { if (activeSection) openPreview(activeSection); });
   closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) closeModal(); });
+  searchEl.addEventListener('input', function () { activeQuery = searchEl.value; renderGrid(); });
 
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closeModal();
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !overlay.hidden) closeModal();
-  });
-
-  searchEl.addEventListener('input', function () {
-    activeQuery = searchEl.value;
-    renderGrid();
-  });
-
-  // ── Init ──
+  /* ── init ── */
   buildTabs();
   renderGrid();
+
 })();
 </script>
 </body>
