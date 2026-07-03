@@ -18,7 +18,7 @@ const SECTIONS = [
     category: "Navbar",
     tags: ["navbar","navigation","header","cta"],
     // Replace with: thumbnail: 'thumbnails/nav-01.png'
-    thumbnail: null,
+    thumbnail: 'https://cdn.shopify.com/s/files/1/0927/4353/2928/files/Gemini_Generated_Image_v6vvh4v6vvh4v6vv.png?v=1781156483',
     html: `<nav class="nav-split">
   <a href="#" class="nav-split__logo">YourBrand</a>
   <ul class="nav-split__links">
